@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Laracasts learn vue</title>
+    <style>
+        .color-red {
+            color: red
+        }
+
+        .is-loading {
+            background: green;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+
+        <h1>All tasks - demonstrating v-for</h1>
+        <ul>
+            <li v-for="task in tasks" v-text="task.description"></li>
+
+        </ul>
+
+        <h2>Incomplete tasks (computed property filtering all tasks by complete flag false)</h2>
+        <ul>
+            <li v-for="(task, key, index) in incompleteTasks">{{ task.description }}
+                <button @click="setComplete(task.description)">Complete</button>
+            </li>
+        </ul>
+
+
+        <h2>Complete tasks (computed property filtering all tasks by complete flag true)</h2>
+        <ul>
+            <li v-for="task in completedTasks">{{ task.description }}
+                <button @click="setInComplete(task.description)">Remove from complete</button>
+            </li>
+        </ul>
+
+        <hr>
+
+        <h1 v-bind:class="className">Heading 1 to test</h1>
+
+        <h2 v-text="new Date()"></h2>
+
+        <h3>
+            Reversed message...demonstrates computed property: {{ reversedMessage }}
+        </h3>
+
+        <button v-bind:class="{'is-loading': isloading}" @click="toggleClass">
+            I'm a button...my CSS class is specified using Object syntax os that my class is dynamiccaly toggled (it's only present if my data property called isLoading is truthy...as it's bound to my class attribute
+        </button>
+        <br>
+        <ul>
+            <li v-for="name in names" v-text="name"></li>
+        </ul>
+
+        <input type="text" id="input" v-model="newName">
+        <button @click="addName" :disabled="isDisabled">Add name</button>
+
+        <br>
+        <button v-bind:title="title">Hover....</button>
+
+
+
+    </div>
+
+    <script src="https://unpkg.com/vue@2.4.4/dist/vue.js"></script>
+    <script>
+        new Vue({
+            el: '#root',
+            data: {
+                newName: '',
+                message: 'Durham is sunny today',
+                title: 'Now title is set dynamically...',
+                names: ['Joe', 'Mary', 'Jane', 'Jack'],
+                className: 'color-red',
+                isloading: true,
+                isDisabled: false,
+                tasks: [{
+                        description: 'Go to the store',
+                        completed: false
+                    },
+                    {
+                        description: 'Tidy up',
+                        completed: true
+                    },
+                    {
+                        description: 'Wash clothes',
+                        completed: false
+                    },
+                    {
+                        description: 'Mow lawn',
+                        completed: true
+                    },
+                    {
+                        description: 'Cook dinner',
+                        completed: false
+                    },
+                    {
+                        description: 'Phone friend',
+                        completed: false
+                    },
+                    {
+                        description: 'Netball admin',
+                        completed: false
+                    },                                        
+                ]
+            },
+            computed: {
+                reversedMessage() {
+                    return this.message.split('').reverse().join('');
+                },
+                incompleteTasks() {
+                    return this.tasks.filter(task => !task.completed);
+                },
+                completedTasks() {
+                    return this.tasks.filter(task => task.completed);
+                },
+            },
+            methods: {
+                addName() {
+                    this.names.push(this.newName);
+                    this.newName = '';
+                    if (this.names.length > 6) {
+                        this.isDisabled = true;
+                    }
+                },
+                toggleClass() {
+                    this.isloading = !this.isloading;
+                },
+                setComplete(event) {
+                    console.log(event);
+                },
+                setComplete(description) {
+                    this.tasks.find(task => task.description === description).completed = true;
+                },   
+                setInComplete(description) {
+                    this.tasks.find(task => task.description === description).completed = false;
+                }                           
+
+            }
+        });
+    </script>
+</body>
+
+</html>
